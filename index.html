@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Fluctuación del Dólar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin: 8px 0;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        .graph-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .graph-container img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Simulador de Fluctuación del Dólar en Bolivia</h1>
+    <form method="POST">
+        <label for="precio_gas">Precio internacional del gas (USD):</label>
+        <input type="text" id="precio_gas" name="precio_gas" required>
+
+        <label for="reservas_internacionales">Reservas internacionales (miles de millones USD):</label>
+        <input type="text" id="reservas_internacionales" name="reservas_internacionales" required>
+
+        <label for="especulacion">Especulación (%):</label>
+        <input type="text" id="especulacion" name="especulacion" required>
+
+        <label for="escasez">Escasez de dólares (%):</label>
+        <input type="text" id="escasez" name="escasez" required>
+
+        <label for="venta_legal_dolar">Venta legal de dólares (%):</label>
+        <input type="text" id="venta_legal_dolar" name="venta_legal_dolar" required>
+
+        <label for="inflacion">Inflación (%):</label>
+        <input type="text" id="inflacion" name="inflacion" required>
+
+        <label for="estabilidad_politica">Estabilidad política (0-1):</label>
+        <input type="text" id="estabilidad_politica" name="estabilidad_politica" required>
+
+        <button type="submit">Simular</button>
+    </form>
+
+    {% if detalles %}
+    <div class="graph-container">
+        <h2>Gráficos de Fluctuación</h2>
+        <img src="data:image/png;base64,{{ graph_url }}" alt="Gráfico de fluctuación">
+    </div>
+
+    <h2>Detalles de la Simulación</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Mes</th>
+                <th>Especulación</th>
+                <th>Escasez</th>
+                <th>Venta Legal</th>
+                <th>Inflación</th>
+                <th>Estabilidad</th>
+                <th>Impacto Gas</th>
+                <th>Impacto Reservas</th>
+                <th>Variación Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detalle in detalles %}
+            <tr>
+                <td>{{ detalle.Mes }}</td>
+                <td>{{ detalle.Especulación | round(2) }}</td>
+                <td>{{ detalle.Escasez | round(2) }}</td>
+                <td>{{ detalle['Venta legal'] | round(2) }}</td>
+                <td>{{ detalle.Inflación | round(2) }}</td>
+                <td>{{ detalle.Estabilidad | round(2) }}</td>
+                <td>{{ detalle['Impacto gas'] | round(2) }}</td>
+                <td>{{ detalle['Impacto reservas'] | round(2) }}</td>
+                <td>{{ detalle['Variación total'] | round(2) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    
+</body>
+</html>
